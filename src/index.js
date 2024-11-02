@@ -1,3 +1,5 @@
+import "./style.css";
+
 export class Ship{
     constructor(length,name) {
         this.length = length;
@@ -126,7 +128,7 @@ export class GameBoard{
 }
 
 
-class Player{
+export class Player{
     constructor(type) {
         this.type = type;
         this.gameBoard = new GameBoard();
@@ -143,3 +145,5 @@ class Player{
         this.ships.forEach(ship => this.gameBoard.placeShipRandomly(ship));
     }
 }
+
+
