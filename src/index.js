@@ -1,4 +1,4 @@
-class Ship{
+export class Ship{
     constructor(length,name, hitScore, sunk) {
         this.length = length;
         this.name = name;
@@ -17,9 +17,10 @@ class Ship{
 }
 
 
-class GameBoard{
-    constructor(board) {
+export class GameBoard{
+    constructor() {
         this.board = [];
+        this.missedAttacks = [];
     }
 
     createBoard() {
@@ -34,7 +35,7 @@ class GameBoard{
         }
     }
 
-    placeShip(ship) {
+    /*placeShip(ship) {
         let isPlaced = false;
 
         while (!isPlaced) {
@@ -44,13 +45,13 @@ class GameBoard{
             if (this.validateCells(ship, randomRow, randomCol, direction)) {
             if (direction === "vertical") {
                 for (let i = 0; i < ship.length; i++){
-                    this.board[randomRow][randomCol] = ship.name;
+                    this.board[randomRow][randomCol] = ship;
                     randomRow += 1;
                     
                 }
             } else if (direction === "horizontal") {
                 for (let i = 0; i < ship.length; i++){
-                    this.board[randomRow][randomCol] = ship.name;
+                    this.board[randomRow][randomCol] = ship;
                     randomCol += 1;
                     
                     }
@@ -58,10 +59,21 @@ class GameBoard{
                 isPlaced = true;
             } 
         }
-        
-        
-
-        
+    }*/
+    placeShip(ship, row, col, direction) {
+        if (this.validateCells(ship, row, col, direction)) {
+            if (direction === "vertical") {
+                for (let i = 0; i < ship.length; i++){
+                    this.board[row][column] = ship;
+                    row += 1;
+                }
+            } else if (direction === "horizontal") {
+                for (let i = 0; i < ship.length; i++){
+                    this.board[row][col] = ship;
+                    col += 1;
+                }
+            }
+        }
     }
 
     validateCells(ship, row, col, direction) {
@@ -86,13 +98,25 @@ class GameBoard{
             return true;
         }
     }
+    receiveAttack(row, column) {
+        if (this.board[row][column] === "X" || this.board[row][column] === ".") {
+            alert("You already shot this field");
+            return;
+        }
+
+        if (this.board[row][column] !== null) {
+            let ship = this.board[row][column];
+            ship.hit();
+            this.board[row][column] = "X";
+            if (ship.isSunk()) {
+                return "Ship is sunk";
+            }
+        } else {
+            this.board[row][column] = ".";
+            this.missedAttacks.push([row, column]);
+        }
+    }
+
 }
 
-
-
-let Carrier = new Ship(5, "Carrier");
-let Battleship = new Ship(4, "Battleship");
-let Cruiser = new Ship(3, "Cruiser");
-let Submarine = new Ship(3, "Submarine");
-let Destroyer = new Ship(2, "Destroyer");
 
