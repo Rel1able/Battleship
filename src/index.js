@@ -21,6 +21,7 @@ export class GameBoard{
     constructor() {
         this.board = [];
         this.missedAttacks = [];
+        this.sunkShipsCounter = 0;
     }
 
     createBoard() {
@@ -99,6 +100,7 @@ export class GameBoard{
         }
     }
     receiveAttack(row, column) {
+        
         if (this.board[row][column] === "X" || this.board[row][column] === ".") {
             alert("You already shot this field");
             return;
@@ -109,13 +111,19 @@ export class GameBoard{
             ship.hit();
             this.board[row][column] = "X";
             if (ship.isSunk()) {
+                this.sunkShipsCounter += 1;
+                if (this.sunkShipsCounter === 5) {
+                    alert("Game over");
+                }
                 return "Ship is sunk";
+                
             }
         } else {
             this.board[row][column] = ".";
             this.missedAttacks.push([row, column]);
         }
     }
+
 
 }
 
