@@ -1,5 +1,5 @@
 export class Ship{
-    constructor(length,name, hitScore, sunk) {
+    constructor(length,name) {
         this.length = length;
         this.name = name;
         this.hitScore = 0;
@@ -8,7 +8,7 @@ export class Ship{
     }
     hit() {
         this.hitScore += 1;
-        return this.hitScore;
+
     }
 
     isSunk() {
@@ -36,7 +36,7 @@ export class GameBoard{
         }
     }
 
-    /*placeShip(ship) {
+    placeShipRandomly(ship) {
         let isPlaced = false;
 
         while (!isPlaced) {
@@ -60,12 +60,12 @@ export class GameBoard{
                 isPlaced = true;
             } 
         }
-    }*/
+    }
     placeShip(ship, row, col, direction) {
         if (this.validateCells(ship, row, col, direction)) {
             if (direction === "vertical") {
                 for (let i = 0; i < ship.length; i++){
-                    this.board[row][column] = ship;
+                    this.board[row][col] = ship;
                     row += 1;
                 }
             } else if (direction === "horizontal") {
@@ -123,8 +123,23 @@ export class GameBoard{
             this.missedAttacks.push([row, column]);
         }
     }
-
-
 }
 
 
+class Player{
+    constructor(type) {
+        this.type = type;
+        this.gameBoard = new GameBoard();
+        this.gameBoard.createBoard();
+        this.ships = [
+            new Ship(5, "Carrier"),
+            new Ship(4, "Battleship"),
+            new Ship(3, "Cruiser"),
+            new Ship(3, "Submarine"),
+            new Ship(2, "Destroyer")
+        ]
+    }
+    placeShips() {
+        this.ships.forEach(ship => this.gameBoard.placeShipRandomly(ship));
+    }
+}
