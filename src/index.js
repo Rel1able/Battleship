@@ -105,7 +105,7 @@ export class GameBoard{
         
         if (this.board[row][column] === "X" || this.board[row][column] === ".") {
             alert("You already shot this field");
-            return;
+            return "Already shot";
         }
 
         if (this.board[row][column] !== null) {
@@ -117,12 +117,13 @@ export class GameBoard{
                 if (this.sunkShipsCounter === 5) {
                     alert("Game over");
                 }
-                return "Ship is sunk";
-                
+                return "Sunk";
             }
+            return "Hit";
         } else {
             this.board[row][column] = ".";
             this.missedAttacks.push([row, column]);
+            return "Miss";
         }
     }
 }
