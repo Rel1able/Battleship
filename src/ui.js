@@ -66,9 +66,11 @@ compDivs.forEach(div => {
         } else if (result === "Sunk") {
             div.style.background = "darkred";
             div.textContent = "X";
+        } if (checkWinner()) {
+            return;
         }
 
-
+        computerMove();
     })
     }
 )
@@ -77,19 +79,57 @@ compDivs.forEach(div => {
 
 
 const playerDivs = playerBoard.querySelectorAll("div");
-let computerShots = [];
 
+let shots = new Set();
 function computerMove() {
+    let row, col;
+    let isNewShot = false;
     
+    while (!isNewShot) {
+        row = Math.floor(Math.random() * 10);
+        col = Math.floor(Math.random() * 10);
+        const coordinateKey = `${row},${col}`;
+
+        if (!shots.has(coordinateKey)) {
+            shots.add(coordinateKey);
+            isNewShot = true;
+
+            const result = realPlayer.gameBoard.receiveAttack(row, col);
+            let divIndex = row * 10 + col;
+            const div = playerDivs[divIndex];
+
+            if (div) {
+                if (result === "Hit") {
+                    div.style.background = "red";
+                    div.textContent = "X";
+                } else if (result === "Miss") {
+                    div.style.background = "lightblue";
+                    div.textContent = ".";
+                } else if (result === "Sunk") {
+                    div.style.background = "darkred";
+                    div.textContent = "X";
+                    
+                }
+            }
+        }
+    }
 }
 
-
-function generateRandomShot() {
-    let row = Math.floor(Math.random() * 10);
-    let col = Math.floor(Math.random() * 10);
-
-    return [row, col];
+function checkWinner() {
+    if (computerPlayer.gameBoard.allShipsSunk()) {
+        alert("Congratulation! You win!");
+        disableGame();
+        return true;
+    } else if (realPlayer.gameBoard.allShipsSunk()) {
+        alert("Game over! The computer wins!");
+        disableGame();
+        return true;
+    }
+    return false;
 }
 
-
-
+function disableGame() {
+    compDivs.forEach(div => {
+        div.removeEventListener("click", () => { });
+    })
+}

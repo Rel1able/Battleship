@@ -114,9 +114,6 @@ export class GameBoard{
             this.board[row][column] = "X";
             if (ship.isSunk()) {
                 this.sunkShipsCounter += 1;
-                if (this.sunkShipsCounter === 5) {
-                    alert("Game over");
-                }
                 return "Sunk";
             }
             return "Hit";
@@ -125,6 +122,9 @@ export class GameBoard{
             this.missedAttacks.push([row, column]);
             return "Miss";
         }
+    }
+    allShipsSunk() {
+        return this.sunkShipsCounter === 5;
     }
 }
 
