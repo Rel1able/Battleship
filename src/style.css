@@ -11,7 +11,7 @@ body{
     grid-template-columns: repeat(10, 1fr);
     height: 400px;
     width: 400px;
-    background-color: green;
+
 }
 
 .real-player-cell {
