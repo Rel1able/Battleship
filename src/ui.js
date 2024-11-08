@@ -4,9 +4,10 @@ const playerBoard = document.getElementById("player-board");
 const computerBoard = document.getElementById("computer-board");
 let shots = new Set();
 let gameOver = false;
-
+let playerTurnDiv = document.querySelector(".player-turn");
     
 playRound();
+
 
 function playRound() {
 
@@ -43,7 +44,7 @@ function playRound() {
     compCells.forEach((row, rowIndex) => {
         row.forEach((compCell, colIndex) => {
             const div = document.createElement("div");
-            div.style.background = "blue"; //compCell ? "darkblue" : "blue";
+            div.style.background = "blue"; 
             div.classList.add("computer-player-cell"); 
             div.setAttribute("data-row", rowIndex);
             div.setAttribute("data-col", colIndex);
@@ -53,7 +54,11 @@ function playRound() {
 
 
     let compDivs = computerBoard.querySelectorAll("div");
+    
 
+    function updateTurnDisplay() {
+        playerTurnDiv.textContent = playerTurn === "player" ? "Player's turn" : "Computer's turn";
+    }
     
     let playerTurn = "player";
     if (playerTurn === "player") {
@@ -85,16 +90,16 @@ function playRound() {
                     return;
                 }
                 if (playerTurn === "computer") {
+                    updateTurnDisplay();
                     setTimeout(computerMove, 500);
                 }
                 
             }
-            else alert("Slow down! Computer makes a move");
         })
         }
     )
     } 
-    
+    updateTurnDisplay();
     const playerDivs = playerBoard.querySelectorAll("div");
 
     function computerMove() {
@@ -124,6 +129,7 @@ function playRound() {
                         div.style.background = "lightblue";
                         div.textContent = ".";
                         playerTurn = "player";
+                        updateTurnDisplay();
                     } else if (result === "Sunk") {
                         div.style.background = "darkred";
                         div.textContent = "X";
@@ -133,10 +139,7 @@ function playRound() {
                 }
             }
         }
-        
-        
     }
-
 
     function checkWinner() {
         if (computerPlayer.gameBoard.allShipsSunk()) {
@@ -164,6 +167,7 @@ function playRound() {
 }
 
 
+
 let textResult = document.querySelector(".text-result");
 let playAgainButton = document.querySelector(".play-again");
 let header = document.querySelector("header");
@@ -176,8 +180,9 @@ let buttonContainer = document.querySelector(".button-container");
 function blurDisplayAndShowResult() {
     header.classList.add("blur");
     boardsContainer.classList.add("blur");
-    footer.classList.add("footer");
+    footer.classList.add("blur");
     buttonContainer.classList.add("blur");
+    playerTurnDiv.classList.add("blur");
     gameResult.style.display = "block";
 }
 
@@ -186,6 +191,8 @@ function removeTheBlur() {
     boardsContainer.classList.remove("blur");
     footer.classList.remove("footer");
     buttonContainer.classList.remove("blur");
+    playerTurnDiv.classList.remove("blur");
+    footer.classList.remove("blur");
     gameResult.style.display = "none";
 }
 
