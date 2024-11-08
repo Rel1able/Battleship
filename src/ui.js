@@ -54,7 +54,7 @@ function playRound() {
 
     let compDivs = computerBoard.querySelectorAll("div");
 
-    compDivs.forEach(div => {
+   /* compDivs.forEach(div => {
         div.addEventListener("click", () => {
             if (!gameOver) {
                 if (div.textContent === "X" || div.textContent === ".") {
@@ -78,18 +78,92 @@ function playRound() {
                 } if (checkWinner()) {
                     return;
                 }
+                setTimeout(() => {
+                    computerMove();
+                }, "1000");
+                
+            }
+            else alert("Game is over!");
+        })
+        }
+    )*/
+    let CellContainsShip = false;
+    if (!CellContainsShip) {
+        compDivs.forEach(div => {
+        div.addEventListener("click", () => {
+            if (!gameOver) {
+                if (div.textContent === "X" || div.textContent === ".") {
+                    alert("You already shot this field");
+                    return;
+                }
+                const row = parseInt(div.getAttribute("data-row"));
+                const col = parseInt(div.getAttribute("data-col"));
 
-                computerMove();
+                const result = computerPlayer.gameBoard.receiveAttack(row, col);
+
+                if (result === "Hit") {
+                    div.style.background = "red";
+                    CellContainsShip = true;
+                    div.textContent = "X";
+                } else if (result === "Miss") {
+                    div.style.background = "lightblue";
+                    CellContainsShip = false;
+                    div.textContent = ".";
+                } else if (result === "Sunk") {
+                    div.style.background = "darkred";
+                    CellContainsShip = false;
+                    div.textContent = "X";
+                } if (checkWinner()) {
+                    return;
+                }
+                setTimeout(() => {
+                    computerMove();
+                }, "1000");
+                
             }
             else alert("Game is over!");
         })
         }
     )
+    } else {
+        compDivs.forEach(div => {
+        div.addEventListener("click", () => {
+            if (!gameOver) {
+                if (div.textContent === "X" || div.textContent === ".") {
+                    alert("You already shot this field");
+                    return;
+                }
+                const row = parseInt(div.getAttribute("data-row"));
+                const col = parseInt(div.getAttribute("data-col"));
 
+                const result = computerPlayer.gameBoard.receiveAttack(row, col);
+
+                if (result === "Hit") {
+                    div.style.background = "red";
+                    CellContainsShip = true;
+                    div.textContent = "X";
+                } else if (result === "Miss") {
+                    div.style.background = "lightblue";
+                    CellContainsShip = false;
+                    div.textContent = ".";
+                } else if (result === "Sunk") {
+                    div.style.background = "darkred";
+                    CellContainsShip = true;
+                    div.textContent = "X";
+                } if (checkWinner()) {
+                    return;
+                }
+            }
+            else alert("Game is over!");
+        })
+        }
+    )
+    }
+    
     const playerDivs = playerBoard.querySelectorAll("div");
 
 
-    function computerMove() {
+   /* function computerMove() {
         let row, col;
         let isNewShot = false;
         
@@ -121,17 +195,58 @@ function playRound() {
                 }
             }
         }
+    }*/
+    function computerMove() {
+        if (!CellContainsShip) {
+            let row, col;
+        let isNewShot = false;
+        
+        while (!isNewShot) {
+            row = Math.floor(Math.random() * 10);
+            col = Math.floor(Math.random() * 10);
+            const coordinateKey = `${row},${col}`;
+
+            if (!shots.has(coordinateKey)) {
+                shots.add(coordinateKey);
+                isNewShot = true;
+
+                const result = realPlayer.gameBoard.receiveAttack(row, col);
+                let divIndex = row * 10 + col;
+                const div = playerDivs[divIndex];
+
+                if (div) {
+                    if (result === "Hit") {
+                        div.style.background = "red";
+                        div.textContent = "X";
+                    } else if (result === "Miss") {
+                        div.style.background = "lightblue";
+                        div.textContent = ".";
+                    } else if (result === "Sunk") {
+                        div.style.background = "darkred";
+                        div.textContent = "X";
+                        
+                    }
+                }
+            }
+        }
+        } else {
+            console.log(1);
+        }
+        
     }
 
 
     function checkWinner() {
         if (computerPlayer.gameBoard.allShipsSunk()) {
-            alert("Congratulation! You win!");
+            textResult.textContent = "Congratulation! You win!";
+            blurDisplayAndShowResult();
             gameOver = true;
             disableGame();
             return true;
         } else if (realPlayer.gameBoard.allShipsSunk()) {
-            alert("Game over! The computer wins!");
+            textResult.textContent = "You lost. The computer won";
+            blurDisplayAndShowResult();
+            
             gameOver = true;
             disableGame();
             return true;
@@ -147,34 +262,49 @@ function playRound() {
 }
 
 
+let textResult = document.querySelector(".text-result");
 let playAgainButton = document.querySelector(".play-again");
+let header = document.querySelector("header");
+let gameResult = document.querySelector(".result");
+let boardsContainer = document.querySelector(".container");
+let footer = document.querySelector("footer");
+let buttonContainer = document.querySelector(".button-container");
+
+
+function blurDisplayAndShowResult() {
+    header.classList.add("blur");
+    boardsContainer.classList.add("blur");
+    footer.classList.add("footer");
+    buttonContainer.classList.add("blur");
+    gameResult.style.display = "block";
+}
+
+function removeTheBlur() {
+    header.classList.remove("blur");
+    boardsContainer.classList.remove("blur");
+    footer.classList.remove("footer");
+    buttonContainer.classList.remove("blur");
+    gameResult.style.display = "none";
+}
 
 playAgainButton.addEventListener("click", () => {
     playerBoard.innerHTML = "";
     computerBoard.innerHTML = "";
     shots.clear();
     gameOver = false;
+    removeTheBlur();
     playRound();
+    
 })
 
 let resetButton = document.querySelector(".reset");
 
+
+
 resetButton.addEventListener("click", () => {
     playerBoard.innerHTML = "";
+    computerBoard.innerHTML = "";
     shots.clear();
     gameOver = false;
-    const realPlayer = new Player("human");
-    let realPlayerBoard = new GameBoard();
-    realPlayerBoard.createBoard();
-    realPlayer.placeShips();
-
-    const cells = realPlayer.gameBoard.board;
-    cells.forEach(row => {
-        row.forEach(cell => {
-            const div = document.createElement("div");
-            div.style.background = cell ? "darkblue" : "blue";
-            div.classList.add("real-player-cell");
-            playerBoard.appendChild(div);
-        });
-    });
+    playRound();
 });
