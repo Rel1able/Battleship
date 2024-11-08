@@ -54,44 +54,12 @@ function playRound() {
 
     let compDivs = computerBoard.querySelectorAll("div");
 
-   /* compDivs.forEach(div => {
-        div.addEventListener("click", () => {
-            if (!gameOver) {
-                if (div.textContent === "X" || div.textContent === ".") {
-                    alert("You already shot this field");
-                    return;
-                }
-                const row = parseInt(div.getAttribute("data-row"));
-                const col = parseInt(div.getAttribute("data-col"));
-
-                const result = computerPlayer.gameBoard.receiveAttack(row, col);
-
-                if (result === "Hit") {
-                    div.style.background = "red";
-                    div.textContent = "X";
-                } else if (result === "Miss") {
-                    div.style.background = "lightblue";
-                    div.textContent = ".";
-                } else if (result === "Sunk") {
-                    div.style.background = "darkred";
-                    div.textContent = "X";
-                } if (checkWinner()) {
-                    return;
-                }
-                setTimeout(() => {
-                    computerMove();
-                }, "1000");
-                
-            }
-            else alert("Game is over!");
-        })
-        }
-    )*/
-    let CellContainsShip = false;
-    if (!CellContainsShip) {
+    
+    let playerTurn = "player";
+    if (playerTurn === "player") {
         compDivs.forEach(div => {
         div.addEventListener("click", () => {
-            if (!gameOver) {
+            if (!gameOver && playerTurn === "player") {
                 if (div.textContent === "X" || div.textContent === ".") {
                     alert("You already shot this field");
                     return;
@@ -103,67 +71,33 @@ function playRound() {
 
                 if (result === "Hit") {
                     div.style.background = "red";
-                    CellContainsShip = true;
+                    playerTurn = "player";
                     div.textContent = "X";
                 } else if (result === "Miss") {
                     div.style.background = "lightblue";
-                    CellContainsShip = false;
+                    playerTurn = "computer";
                     div.textContent = ".";
                 } else if (result === "Sunk") {
                     div.style.background = "darkred";
-                    CellContainsShip = false;
+                    playerTurn = "player";
                     div.textContent = "X";
                 } if (checkWinner()) {
                     return;
                 }
-                setTimeout(() => {
-                    computerMove();
-                }, "1000");
+                if (playerTurn === "computer") {
+                    setTimeout(computerMove, 500);
+                }
                 
             }
-            else alert("Game is over!");
+            else alert("Slow down! Computer makes a move");
         })
         }
     )
-    } else {
-        compDivs.forEach(div => {
-        div.addEventListener("click", () => {
-            if (!gameOver) {
-                if (div.textContent === "X" || div.textContent === ".") {
-                    alert("You already shot this field");
-                    return;
-                }
-                const row = parseInt(div.getAttribute("data-row"));
-                const col = parseInt(div.getAttribute("data-col"));
-
-                const result = computerPlayer.gameBoard.receiveAttack(row, col);
-
-                if (result === "Hit") {
-                    div.style.background = "red";
-                    CellContainsShip = true;
-                    div.textContent = "X";
-                } else if (result === "Miss") {
-                    div.style.background = "lightblue";
-                    CellContainsShip = false;
-                    div.textContent = ".";
-                } else if (result === "Sunk") {
-                    div.style.background = "darkred";
-                    CellContainsShip = true;
-                    div.textContent = "X";
-                } if (checkWinner()) {
-                    return;
-                }
-            }
-            else alert("Game is over!");
-        })
-        }
-    )
-    }
+    } 
     
     const playerDivs = playerBoard.querySelectorAll("div");
 
-
-   /* function computerMove() {
+    function computerMove() {
         let row, col;
         let isNewShot = false;
         
@@ -184,54 +118,22 @@ function playRound() {
                     if (result === "Hit") {
                         div.style.background = "red";
                         div.textContent = "X";
+                        playerTurn = "computer";
+                        setTimeout(computerMove, 500);
                     } else if (result === "Miss") {
                         div.style.background = "lightblue";
                         div.textContent = ".";
+                        playerTurn = "player";
                     } else if (result === "Sunk") {
                         div.style.background = "darkred";
                         div.textContent = "X";
+                        setTimeout(computerMove, 500);
                         
                     }
                 }
             }
         }
-    }*/
-    function computerMove() {
-        if (!CellContainsShip) {
-            let row, col;
-        let isNewShot = false;
         
-        while (!isNewShot) {
-            row = Math.floor(Math.random() * 10);
-            col = Math.floor(Math.random() * 10);
-            const coordinateKey = `${row},${col}`;
-
-            if (!shots.has(coordinateKey)) {
-                shots.add(coordinateKey);
-                isNewShot = true;
-
-                const result = realPlayer.gameBoard.receiveAttack(row, col);
-                let divIndex = row * 10 + col;
-                const div = playerDivs[divIndex];
-
-                if (div) {
-                    if (result === "Hit") {
-                        div.style.background = "red";
-                        div.textContent = "X";
-                    } else if (result === "Miss") {
-                        div.style.background = "lightblue";
-                        div.textContent = ".";
-                    } else if (result === "Sunk") {
-                        div.style.background = "darkred";
-                        div.textContent = "X";
-                        
-                    }
-                }
-            }
-        }
-        } else {
-            console.log(1);
-        }
         
     }
 
