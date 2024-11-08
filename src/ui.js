@@ -163,19 +163,18 @@ resetButton.addEventListener("click", () => {
     playerBoard.innerHTML = "";
     shots.clear();
     gameOver = false;
-
     const realPlayer = new Player("human");
     let realPlayerBoard = new GameBoard();
     realPlayerBoard.createBoard();
     realPlayer.placeShips();
 
-    let cells = realPlayer.gameBoard.board;
+    const cells = realPlayer.gameBoard.board;
     cells.forEach(row => {
         row.forEach(cell => {
             const div = document.createElement("div");
             div.style.background = cell ? "darkblue" : "blue";
             div.classList.add("real-player-cell");
             playerBoard.appendChild(div);
-        })
-    })
-}) 
+        });
+    });
+});

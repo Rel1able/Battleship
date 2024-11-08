@@ -78,26 +78,37 @@ export class GameBoard{
             }
         }
     }
+    validCell(row, col) {
+        return row >= 0 && row < 10 && col >= 0 && col < 10;
+    }
 
     validateCells(ship, row, col, direction) {
         if (direction === "vertical") {
             if (row + ship.length > this.board.length) return false;
 
-            for (let i = 0; i < ship.length; i++){
-                if (this.board[row][col] !== null) {
-                    return false
+            for (let i = -1; i <= ship.length; i++){
+                for (let j = -1; j <= 1; j++){
+                    let newRow = row + i;
+                    let newCol = col + j;
+                    if (this.validCell(newRow, newCol) && this.board[newRow][newCol] !== null) {
+                        return false;
+                    
                 }
-                row += 1;
             }
+        }
             return true;
         } else if (direction === "horizontal") {
             if (col + ship.length > this.board[0].length) return false;
-            for (let i = 0; i < ship.length; i++){
-                if (this.board[row][col] !== null) {
-                    return false;
-                }
-                col += 1;
-            }
+            for (let i = -1; i <= 1; i++){
+                     for (let j = -1; j <= ship.length; j++){
+                        let newRow = row + i;
+                        let newCol = col + j;
+                        if (this.validCell(newRow, newCol) && this.board[newRow][newCol] !== null) {
+                                return false;
+                            }
+                        }
+                    }
+    
             return true;
         }
     }
