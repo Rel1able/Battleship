@@ -1,9 +1,12 @@
 body{
-    background-color: rgb(25, 109, 245);
+    background: linear-gradient(rgb(9, 1, 69), rgb(25, 4, 182));
     display: flex;
     flex-direction: column;
     height: 100vh;
     justify-content: space-between;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, Helvetica, sans-serif;
 }
 
 #player-board, #computer-board {
@@ -43,11 +46,101 @@ body{
 .result{
     position: absolute;
     top: 25%;
-    left: 25%;
+    left: 24%;
     z-index: 2;
     height: 50%;
     width: 50%;
     font-size: 20px;
     border: 2px solid;
     display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-size: 2rem;
+    background-color: rgb(31, 31, 31);
+    color: white;
+    padding: 1rem;
+    text-align: center;
+    border-radius: 2rem;
+    border: 2px solid rgb(46, 46, 46);
+    gap: 2rem;
+}
+
+header{
+    background-color: rgb(29, 29, 29);
+    color: rgb(204, 206, 255);
+    font-size: 4rem;
+    text-align: center;
+    padding: 8px;
+}
+
+.player-turn{
+    font-size: 2.5rem;
+    text-align: center;
+    color: rgb(196, 209, 239);
+}
+
+.button-container{
+    display :flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.reset{
+    padding: 1rem 3rem;
+    font-size: 1.5rem;
+    background-color: rgb(29, 29, 29);
+    border: 3px solid rgb(92, 90, 90);
+    color: white;
+    cursor: pointer;
+    border-radius: 1rem;
+}
+
+.reset:hover, .play-again:hover{
+    background-color: rgb(56, 56, 56);
+}
+
+footer{
+    color: white;
+    background-color: rgb(29, 29, 29);
+    font-size: 2rem;
+    text-align: center;
+    padding: 8px;
+}
+
+a{ 
+    text-decoration: none;
+    color: white;
+}
+
+.play-again{
+    padding: 1rem 3rem;
+    font-size: 2rem;
+    cursor: pointer;
+    border-radius: 1rem;
+    background-color: rgb(31, 31, 31);
+    color: white;
+    border: 2px solid rgb(92, 90, 90);
+}
+
+.randomte{
+    color: rgb(50, 113, 231);
+}
+
+.real-player-cell, .computer-player-cell{
+
+    font-size: 2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+header, footer{
+    background-color: rgb(44, 44, 44);
+}
+
+
+.hovered:hover{
+    background-color: rgb(40, 17, 243) !important;
+    cursor: pointer;
 }

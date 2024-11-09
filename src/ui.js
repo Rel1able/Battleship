@@ -6,6 +6,7 @@ let shots = new Set();
 let gameOver = false;
 let playerTurnDiv = document.querySelector(".player-turn");
     
+
 playRound();
 
 
@@ -24,8 +25,9 @@ function playRound() {
     cells.forEach(row => {
         row.forEach(cell => {
             const div = document.createElement("div");
-            div.style.background = cell ? "darkblue" : "blue";
+            div.style.background = cell ? "darkblue" : "rgb(50, 113, 231)";
             div.classList.add("real-player-cell");
+            div.classList.add("hovered");
             playerBoard.appendChild(div);
         })
         
@@ -44,8 +46,9 @@ function playRound() {
     compCells.forEach((row, rowIndex) => {
         row.forEach((compCell, colIndex) => {
             const div = document.createElement("div");
-            div.style.background = "blue"; 
+            div.style.background = "rgb(50, 113, 231)"; 
             div.classList.add("computer-player-cell"); 
+            div.classList.add("hovered");
             div.setAttribute("data-row", rowIndex);
             div.setAttribute("data-col", colIndex);
             computerBoard.appendChild(div);
@@ -57,7 +60,7 @@ function playRound() {
     
 
     function updateTurnDisplay() {
-        playerTurnDiv.textContent = playerTurn === "player" ? "Player's turn" : "Computer's turn";
+        playerTurnDiv.textContent = playerTurn === "player" ? "Your turn" : "Computer's turn";
     }
     
     let playerTurn = "player";
@@ -66,7 +69,7 @@ function playRound() {
         div.addEventListener("click", () => {
             if (!gameOver && playerTurn === "player") {
                 if (div.textContent === "X" || div.textContent === ".") {
-                    alert("You already shot this field");
+                    alert("You've already shot this cell");
                     return;
                 }
                 const row = parseInt(div.getAttribute("data-row"));
@@ -74,19 +77,18 @@ function playRound() {
 
                 const result = computerPlayer.gameBoard.receiveAttack(row, col);
 
-                if (result === "Hit") {
-                    div.style.background = "red";
+                if (result === "Hit" ||result === "Sunk") {
+                    div.style.background = "rgb(177, 7, 7)";
                     playerTurn = "player";
                     div.textContent = "X";
+                    div.classList.remove("hovered");
                 } else if (result === "Miss") {
-                    div.style.background = "lightblue";
+                    div.textContent = "•";
+                    div.style.fontSize = "4rem";
+                    div.style.color = "rgb(2, 25, 68)";
+                    div.classList.remove("hovered");
                     playerTurn = "computer";
-                    div.textContent = ".";
-                } else if (result === "Sunk") {
-                    div.style.background = "darkred";
-                    playerTurn = "player";
-                    div.textContent = "X";
-                } if (checkWinner()) {
+                }  if (checkWinner()) {
                     return;
                 }
                 if (playerTurn === "computer") {
@@ -120,21 +122,19 @@ function playRound() {
                 const div = playerDivs[divIndex];
 
                 if (div) {
-                    if (result === "Hit") {
-                        div.style.background = "red";
+                    if (result === "Hit" || result === "Sunk") {
+                        div.style.background = "rgb(177, 7, 7)";
                         div.textContent = "X";
+                        div.classList.remove("hovered");
                         playerTurn = "computer";
                         setTimeout(computerMove, 500);
                     } else if (result === "Miss") {
-                        div.style.background = "lightblue";
-                        div.textContent = ".";
+                        div.textContent = "•";
+                        div.style.color = "rgb(2, 25, 68)";
+                        div.style.fontSize = "4rem";
+                        div.classList.remove("hovered");
                         playerTurn = "player";
                         updateTurnDisplay();
-                    } else if (result === "Sunk") {
-                        div.style.background = "darkred";
-                        div.textContent = "X";
-                        setTimeout(computerMove, 500);
-                        
                     }
                 }
             }
@@ -143,17 +143,19 @@ function playRound() {
 
     function checkWinner() {
         if (computerPlayer.gameBoard.allShipsSunk()) {
-            textResult.textContent = "Congratulation! You win!";
+            textResult.textContent = "Congratulations, you won!";
             blurDisplayAndShowResult();
             gameOver = true;
             disableGame();
+            disableReset();
             return true;
         } else if (realPlayer.gameBoard.allShipsSunk()) {
-            textResult.textContent = "You lost. The computer won";
+            textResult.textContent = "Unfortunately you lost, the computer won!";
             blurDisplayAndShowResult();
             
             gameOver = true;
             disableGame();
+            disableReset();
             return true;
         }
         return false;
@@ -183,7 +185,7 @@ function blurDisplayAndShowResult() {
     footer.classList.add("blur");
     buttonContainer.classList.add("blur");
     playerTurnDiv.classList.add("blur");
-    gameResult.style.display = "block";
+    gameResult.style.display = "flex";
 }
 
 function removeTheBlur() {
@@ -203,17 +205,23 @@ playAgainButton.addEventListener("click", () => {
     gameOver = false;
     removeTheBlur();
     playRound();
+    enableReset();
     
 })
 
 let resetButton = document.querySelector(".reset");
 
-
-
-resetButton.addEventListener("click", () => {
+function handleReset() {
     playerBoard.innerHTML = "";
     computerBoard.innerHTML = "";
     shots.clear();
     gameOver = false;
     playRound();
-});
+}
+
+function enableReset() {
+    resetButton.addEventListener("click", handleReset);
+}
+function disableReset() {
+    resetButton.removeEventListener("click", handleReset);
+}
