@@ -5,8 +5,8 @@ const computerBoard = document.getElementById("computer-board");
 let shots = new Set();
 let gameOver = false;
 let playerTurnDiv = document.querySelector(".player-turn");
-    
-
+let resetButton = document.querySelector(".reset");
+enableReset();
 playRound();
 
 
@@ -209,7 +209,7 @@ playAgainButton.addEventListener("click", () => {
     
 })
 
-let resetButton = document.querySelector(".reset");
+
 
 function handleReset() {
     playerBoard.innerHTML = "";
