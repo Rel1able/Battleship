@@ -25,7 +25,7 @@ function playRound() {
     cells.forEach(row => {
         row.forEach(cell => {
             const div = document.createElement("div");
-            div.style.background = cell ? "darkblue" : "rgb(50, 113, 231)";
+            div.style.background = cell ? "darkblue" : "rgb(39, 111, 244)";
             div.classList.add("real-player-cell");
             div.classList.add("hovered");
             playerBoard.appendChild(div);
@@ -46,7 +46,7 @@ function playRound() {
     compCells.forEach((row, rowIndex) => {
         row.forEach((compCell, colIndex) => {
             const div = document.createElement("div");
-            div.style.background = "rgb(50, 113, 231)"; 
+            div.style.background = "rgb(39, 111, 244)"; 
             div.classList.add("computer-player-cell"); 
             div.classList.add("hovered");
             div.setAttribute("data-row", rowIndex);
